@@ -1,0 +1,11 @@
+[Unit]
+Description=Rancher Desktop Privisioning Scripts
+Requires=setup-network.service
+JoinsNamespaceOf=setup-network.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+
+[Install]
+WantedBy=rancher-destkop.target

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="https://github.com/OSInside/kiwi/raw/v9.24.43/kiwi/schema/kiwi.rng"?>
+
+<image schemaversion="7.5" name="rancher-desktop-distro">
+  <description type="system">
+    <author>Mook-as</author>
+    <contact>mook-as@users.github.io</contact>
+    <specification>VM Image for Rancher Desktop</specification>
+  </description>
+  <profiles>
+    <profile name="lima" description="Tucows Lima" />
+    <profile name="wsl" description="WSL distribution" />
+  </profiles>
+  <preferences>
+    <version>0.100.0</version>
+    <packagemanager>zypper</packagemanager>
+    <timezone>UTC</timezone>
+    <rpm-excludedocs>true</rpm-excludedocs>
+  </preferences>
+  <preferences profiles="lima">
+    <type image="oem" format="qcow2" filesystem="ext4" />
+  </preferences>
+  <preferences profiles="wsl">
+    <type image="tbz" />
+  </preferences>
+  <repository type="rpm-md" imageinclude="true">
+    <!--
+      Use factory, as Leap 15.6 systemd is too old to work correctly on WSL
+      (We require at least 255.7); see:
+      https://github.com/systemd/systemd/pull/32534
+    -->
+    <source path="obs://openSUSE:Factory/standard" />
+  </repository>
+  <repository type="rpm-md" imageinclude="true" profiles="lima">
+    <!-- The lima image may need aarch64 ports (for mac M1) -->
+    <source path="http://download.opensuse.org/ports/aarch64/tumbleweed/repo/oss/" />
+  </repository>
+  <repository type="rpm-md" imageinclude="false" repository_gpgcheck="false">
+    <!-- Require openresty -->
+    <source path="https://mook-as.github.io/rd-openresty-packaging/" />
+  </repository>
+  <repository type="rpm-md" imageinclude="false" priority="150">
+    <!-- For mkcert -->
+    <source path="obs://devel:languages:go/15.6" />
+  </repository>
+  <packages type="bootstrap">
+    <package name="coreutils" />
+    <package name="zypper" />
+    <!-- needed for HTTPS repositories -->
+    <package name="ca-certificates-mozilla" />
+  </packages>
+  <packages type="image">
+    <package name="pattern:minimal_base" />
+    <package name="busybox" />
+    <package name="busybox-static" />
+    <package name="logrotate" />
+    <package name="tini-static" />
+    <package name="docker" />
+    <package name="docker-buildx" />
+    <package name="cni-plugins" />
+    <package name="curl" />
+    <package name="git-core" /> <!-- so docker-compose can use a git URL -->
+    <package name="containerd-ctr" /> <!-- needed to copy files to the host -->
+    <package name="mkcert" /> <!-- used by the image-allow-list feature -->
+    <package name="iptables-backend-nft" />
+    <package name="system-user-nobody" />
+    <package name="systemd" />
+    <package name="rd-openresty" />
+  </packages>
+  <packages type="image" profiles="wsl">
+    <package name="hostname" /> <!-- needed for lima on WSL (getWslSSHAddress) -->
+    <package name="openssh-server" />
+    <package name="sudo" />
+    <package name="systemd &gt;= 255.7" />
+  </packages>
+  <packages type="image" profiles="lima">
+    <package name="cloud-init" />
+    <package name="cni-plugin-flannel" />
+    <package name="dracut-kiwi-oem-repart" />
+    <package name="dracut" />
+    <package name="grub2" />
+    <package name="kernel-default" />
+    <package name="NetworkManager" />
+    <package name="openssh-server" />
+    <package name="timezone" />
+  </packages>
+  <users>
+    <user pwdformat="plain" password="suse" home="/root" name="root" groups="root" />
+  </users>
+</image>
