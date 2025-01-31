@@ -17,7 +17,7 @@ INPUTS += root/build/cri-dockerd-$(CRI_DOCKERD_VERSION).tgz
 root/build/cri-dockerd-$(CRI_DOCKERD_VERSION).tgz: root/build/cri-dockerd-$(CRI_DOCKERD_VERSION).LICENSE
 	wget -O "$@" \
 		"https://github.com/$(CRI_DOCKERD_REPO)/releases/download/${CRI_DOCKERD_VERSION}/cri-dockerd-${CRI_DOCKERD_VERSION:v%=%}.$(GOARCH).tgz"
-	touch --reference=$@ $<
+	touch -r $@ $<
 
 INPUTS += root/build/cri-dockerd-$(CRI_DOCKERD_VERSION).LICENSE
 root/build/cri-dockerd-$(CRI_DOCKERD_VERSION).LICENSE:
