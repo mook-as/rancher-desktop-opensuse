@@ -23,7 +23,7 @@
   <preferences profiles="wsl">
     <type image="tbz" />
   </preferences>
-  <repository type="rpm-md" imageinclude="true">
+  <repository type="rpm-md" imageinclude="true" alias="tumbleweed">
     <!--
       Use factory, as Leap 15.6 systemd is too old to work correctly on WSL
       (We require at least 255.7); see:
@@ -31,17 +31,22 @@
     -->
     <source path="obs://openSUSE:Factory/standard" />
   </repository>
-  <repository type="rpm-md" imageinclude="true" profiles="lima">
+  <repository type="rpm-md" imageinclude="true" alias="tumbleweed-aarch64" profiles="lima">
     <!-- The lima image may need aarch64 ports (for mac M1) -->
     <source path="http://download.opensuse.org/ports/aarch64/tumbleweed/repo/oss/" />
   </repository>
-  <repository type="rpm-md" imageinclude="false" repository_gpgcheck="false">
+  <repository type="rpm-md" imageinclude="false" alias="rd-openresty-packaging" repository_gpgcheck="false">
     <!-- Require openresty -->
     <source path="https://mook-as.github.io/rd-openresty-packaging/" />
   </repository>
-  <repository type="rpm-md" imageinclude="false" priority="150">
+  <repository type="rpm-md" imageinclude="false" alias="devel-languages-go" priority="150">
     <!-- For mkcert -->
-    <source path="obs://devel:languages:go/15.6" />
+    <source path="obs://devel:languages:go/openSUSE_Factory" />
+  </repository>
+  <repository type="rpm-md" imageinclude="false" alias="devel-languages-go-aarch64" profiles="lima"
+    priority="150">
+    <!-- For mkcert -->
+    <source path="obs://devel:languages:go/openSUSE_Factory_ARM" />
   </repository>
   <packages type="bootstrap">
     <package name="coreutils" />
