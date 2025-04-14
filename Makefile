@@ -2,8 +2,9 @@
 
 include root/build/versions.env
 
-GOARCH ?= $(shell go env GOARCH)
-GOOS ?= $(shell go env GOOS)
+GO ?= $(or $(shell which go.exe),$(shell which go))
+GOARCH ?= $(shell $(GO) env GOARCH)
+GOOS ?= $(shell $(GO) env GOOS)
 TYPE ?= $(if $(filter windows,$(GOOS)),tar.xz,qcow2)
 
 # Default target is either `distro.qcow2` or `distro.tar.xz`
