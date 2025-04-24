@@ -18,7 +18,7 @@
     <rpm-excludedocs>true</rpm-excludedocs>
   </preferences>
   <preferences profiles="lima">
-    <type image="oem" format="qcow2" filesystem="ext4" />
+    <type image="oem" format="qcow2" filesystem="ext4" firmware="efi" />
   </preferences>
   <preferences profiles="wsl">
     <type image="tbz" />
@@ -88,6 +88,7 @@
     <package name="NetworkManager" />
     <package name="openssh-server" />
     <package name="timezone" />
+    <package name="grub2-x86_64-efi" arch="x86_64" />
   </packages>
   <users>
     <user pwdformat="plain" password="suse" home="/root" name="root" groups="root" />
