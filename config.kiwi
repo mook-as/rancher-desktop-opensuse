@@ -96,7 +96,7 @@
     <package name="cni-plugin-flannel" />
     <package name="dracut" />
     <package name="grub2" />
-    <package name="kernel-default" />
+    <package name="kernel-default-base" />
     <package name="NetworkManager" />
     <package name="grub2-x86_64-efi" arch="x86_64" />
   </packages>
