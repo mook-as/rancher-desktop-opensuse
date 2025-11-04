@@ -9,18 +9,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        type: [tar.xz, qcow2]
-        arch: [amd64, arm64]
         include:
-        - arch: amd64
+        - type: tar.xz
+          arch: amd64
           runs-on: ubuntu-latest
-        - arch: arm64
+        - type: qcow2
+          arch: amd64
+          runs-on: ubuntu-latest
+        - type: qcow2
+          arch: arm64
           runs-on: ubuntu-24.04-arm
-        exclude:
-          - type: tar.xz
-            arch: arm64
     env:
-      GO: /bin/false
+      GO: /bin/false # Never used, but disable auto-detection in the Makefile.
       GOOS: linux
       GOARCH: ${{ matrix.arch }}
 
