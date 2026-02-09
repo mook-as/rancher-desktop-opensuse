@@ -6,10 +6,14 @@ permissions:
   contents: read
 jobs:
   build:
+    name: Build Artifacts
     uses: ./.github/workflows/build.yaml
   upload:
+    name: Create Release
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create releases.
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
