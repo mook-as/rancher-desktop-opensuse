@@ -28,7 +28,15 @@ jobs:
         for f in distro.*.{qcow2,tar.xz}; do
           sha256sum "$f" > "$f.sha256"
         done
-    - name: Upload release assets
-      run: gh release upload --clobber ${GITHUB_REF_NAME} distro.*.{qcow2,tar.xz}{,.sha256}
+    - name: Create release
+      run: >-
+        gh release create
+        --title "${GITHUB_REF_NAME#test-}"
+        --draft
+        --generate-notes
+        --verify-tag
+        --repo ${{ github.repository }}
+        "${GITHUB_REF_NAME}"
+        distro.*.{qcow2,tar.xz}{,.sha256}
       env:
         GH_TOKEN: ${{ github.token }}
