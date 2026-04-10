@@ -22,7 +22,7 @@ for p in /dev/mapper/"$(basename "$LOOP")"p*; do
     ROOT=$p
     break
 done
-test -n "$ROOT"
+: ${ROOT:?Failed to find ext4 partition in $RAW}
 
 MNT=$(mktemp -d)
 mount "$ROOT" "$MNT"
