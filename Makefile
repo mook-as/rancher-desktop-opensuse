@@ -15,6 +15,7 @@ distro.$(TYPE):
 
 DOWNLOADS += root/build/nerdctl-$(NERDCTL_VERSION).tgz
 root/build/nerdctl-$(NERDCTL_VERSION).tgz:
+	# scan:audited -- checksum is validated against root/buid/versions.env constant
 	wget -O "$@" \
 		"https://github.com/$(NERDCTL_REPO)/releases/download/${NERDCTL_VERSION}/nerdctl-full-${NERDCTL_VERSION:v%=%}-linux-$(GOARCH).tar.gz"
 	echo "$(NERDCTL_SUM_$(GOARCH))  $@" | sha256sum -c -
