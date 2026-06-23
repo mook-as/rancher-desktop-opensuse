@@ -1,6 +1,7 @@
+# kiwi-profile: lima
+
 [Unit]
 Description=/mnt/lima-cidata Mount Point
-ConditionVirtualization=!wsl
 
 [Mount]
 Where=/mnt/lima-cidata

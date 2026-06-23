@@ -1,6 +1,7 @@
+# kiwi-profile: wsl
+
 [Unit]
 Description=Rancher Desktop Guest Agent
-ConditionVirtualization=wsl
 Requires=network-namespace.service network-setup.service
 After=network-setup.service
 

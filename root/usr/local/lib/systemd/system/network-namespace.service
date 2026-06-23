@@ -1,6 +1,7 @@
+# kiwi-profile: wsl
+
 [Unit]
 Description=Create a network namespace
-ConditionVirtualization=wsl
 
 [Service]
 PrivateNetwork=true

@@ -1,6 +1,7 @@
+# kiwi-profile: wsl
+
 [Unit]
 Description=Set Up Rancher Desktop WSL Networking
-ConditionVirtualization=wsl
 Requires=network-namespace.service
 After=network-namespace.service
 

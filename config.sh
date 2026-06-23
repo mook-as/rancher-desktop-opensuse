@@ -72,6 +72,15 @@ ln /usr/sbin/tini-static /usr/sbin/tini
 # build process to prevent issues checking the repository out.
 mv /usr/local/lib/systemd/system/mnt-lima{-,\\x2d}cidata.mount
 
+# Remove systemd units and drop-ins that are specific to kiwi profiles that are
+# not active in this build.
+while read -r file; do
+    if ! grep --quiet --extended-regexp "^# kiwi-profile: ${kiwi_profiles:-}" "$file"; then
+        echo "Removing $file"
+        rm -f "$file"
+    fi
+done < <(grep --files-with-matches --extended-regexp --recursive '^# kiwi-profile:' /usr/local/lib/systemd/system)
+
 #======================================
 # Fix permissions
 #--------------------------------------
@@ -103,8 +112,14 @@ if [[ ${kiwi_profiles:-} =~ lima ]]; then
 
     systemctl enable rd-init.service
     systemctl enable journal-to-console.service
-    # Disable network namespace related functionality (WSL only)
-    rm -f /usr/local/lib/systemd/system/*/network-namespace.conf
+    found=
+    while read -r foo; do
+        echo "$foo"
+        found=1
+    done < <(find /usr/local/lib/systemd/system/ -name network-namespace.conf)
+    if [[ -n "$found" ]]; then
+        exit 1
+    fi
     # Remove the docker config that is only used on Windows
     rm -f /root/.docker/config.json
 fi
@@ -113,10 +128,6 @@ fi
 # WSL-specific fixes
 #--------------------------------------
 if [[ ${kiwi_profiles:-} =~ wsl ]]; then
-    # No rd-init.service or ci-data mount on WSL
-    rm -f /usr/local/lib/systemd/system/lima-init.service.d/requires-cidata.conf
-    rm -f /usr/local/lib/systemd/system/lima-init.service.d/requires-rd-init.conf
-
     # Enable network namespace
     systemctl enable network-setup
     systemctl enable rancher-desktop-guest-agent.service
